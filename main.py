@@ -1,10 +1,19 @@
 def main():
   book_path = "books/frankenstein.txt"
-  text = get_book_text(book_path)
-  char_map = get_unique_chars(text)
+  generate_report(book_path)
 
-  print(f"total words = {get_word_count(text)}")
-  print(f"characters = {char_map}")
+def generate_report(path):
+  text = get_book_text(path)
+  char_map = get_unique_chars(text)
+  word_count = get_word_count(text)
+
+  print(f"{word_count} words found in document\n")
+
+  sorted_map = {k: v for k, v in sorted(char_map.items(), key=lambda item: -item[1])}
+  for c in sorted_map:
+    print(f"The '{c}' character was found {sorted_map[c]} times")
+  
+  print("--- End report ---")
 
 def get_word_count(text):
   return len(text.split())
@@ -18,7 +27,7 @@ def get_unique_chars(text: str) -> dict:
   lower = text.lower()
 
   for c in lower:
-    if c == " ":
+    if not c.isalpha():
       continue
     contains[c] = contains.get(c, 0) + 1
 
